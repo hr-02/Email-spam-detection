@@ -34,7 +34,7 @@ Steps for Prefect Deployment:
 
 
 @task(name="MLFlow Init")
-def init_mlflow(mlflow_tracking_uri, mlflow_experiment_name):
+def init_mlflow(mlflow_tracking_uri= "http://localhost:5000", mlflow_experiment_name= "spam-detection-experiment"):
     '''
     Initialise MLFlow for experiment tracking.
 
@@ -103,7 +103,7 @@ def load_preprocessor(device='cpu'):
         sentence_model: the sentence transformer model
     '''
     return SentenceTransformer(
-        'model_training\sentence-transformers_all-mpnet-base-v2', device=device
+        'all-mpnet-base-v2', device=device
     )
 
 
@@ -344,8 +344,8 @@ def stage_model(client, model_info):
 
 @flow(name="Spam Detection Capstone")
 def detector_training_main(
-    mlflow_tracking_uri: "http://127.0.0.1:5000/",
-    mlflow_experiment_name:"spam-detection-experiment",
+    mlflow_tracking_uri: str ="http://localhost:5000",
+    mlflow_experiment_name: str = "spam-detection-experiment",
 ) -> None:
     mlflow_client, optuna_mlflow_callback = init_mlflow(
         mlflow_tracking_uri, mlflow_experiment_name
