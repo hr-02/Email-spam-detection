@@ -65,7 +65,7 @@ def load_model(mlflow_client):
     '''
     # Get all registered models
     registered_models = mlflow_client.search_registered_models(
-        filter_string=f"name='spam-detector'"
+        filter_string=f"name='spam-detector-experiment'"
     )
 
     production_model_run_id = [
@@ -104,7 +104,7 @@ def get_current_year_and_month():
     return now.year, now.month
 
 
-def spam_detection(mlflow_tracking_uri= "sqlite:///mlflow.db):
+def spam_detection(mlflow_tracking_uri= "http://localhost:5000"):
     unseen_df = fetch_data()
 
     unseen_embeddings = preprocess_data(unseen_df)
