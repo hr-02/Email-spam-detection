@@ -1,6 +1,8 @@
 import sys
 import pandas as pd
 from datetime import datetime
+import json
+import pandas as pd
 
 import mlflow
 from mlflow import MlflowClient
@@ -52,7 +54,6 @@ def preprocess_data(df):
         embeddings: the embeddings of the text
     '''
     # to use CPU only for inference for simplicity
-    df=read_json(df)
     sentence_model = load_preprocessor('cpu')
     return embed_text(df['text'].values, sentence_model)
 
@@ -102,6 +103,8 @@ app = Flask('spam-prediction')
 def spam_detection():
     unseen_df = request.get_json()
 
+    unseen_df=pd.read_json(unseen_df)
+
     unseen_embeddings = preprocess_data(unseen_df)
 
     
@@ -115,8 +118,7 @@ def spam_detection():
     prediction_df = pd.DataFrame(predictions, columns=['prediction'])
     year, month = get_current_year_and_month()
     prediction_df['text_id'] = f'{year:04d}-{month:02d}_' + unseen_df.index.astype(str)
-
-    return jsonify(prediction_df)
+    return jsonify(prediction_df.to_csv())
 
 
 if __name__ == '__main__':
