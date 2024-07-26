@@ -20,8 +20,8 @@ from evidently.metrics.data_drift.embedding_drift_methods import distance, mmd
 
 '''
 Steps at root directory:
-1. docker compose -f .\monitoring\docker-compose.yml up --build
-2. python .\monitoring\evidently_metrics_calculation.py 
+1. docker compose -f ./monitoring/docker-compose.yml up --build
+2. python ./monitoring/evidently_metrics_calculation.py 
 '''
 
 SEND_TIMEOUT = 10
@@ -151,9 +151,9 @@ def get_reference_data(production_model_run_id, mlflow_client):
         reference_df: the dataframe containing the reference data
     '''
     run_info = mlflow_client.get_run(production_model_run_id)
-    s3_artifact_uri = run_info.info.artifact_uri
+    artifact_uri = run_info.info.artifact_uri
 
-    reference_df = pd.read_csv(s3_artifact_uri + '/dataset/train_embeddings_df.csv')
+    reference_df = pd.read_csv('mlartifacts/1/182c47be421e48bcaad46374c17130e9/artifacts/dataset/train_embeddings_df.csv')
     return reference_df
 
 

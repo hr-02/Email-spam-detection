@@ -34,7 +34,7 @@ Steps for Prefect Deployment:
 
 
 @task(name="MLFlow Init")
-def init_mlflow(mlflow_tracking_uri= "http://localhost:5000", mlflow_experiment_name= "spam-detection-experiment"):
+def init_mlflow(mlflow_tracking_uri= "http://127.0.0.1:5000", mlflow_experiment_name= "spam-detection-experiment"):
     '''
     Initialise MLFlow for experiment tracking.
 
@@ -344,7 +344,7 @@ def stage_model(client, model_info):
 
 @flow(name="Spam Detection Capstone")
 def detector_training_main(
-    mlflow_tracking_uri: str ="http://localhost:5000",
+    mlflow_tracking_uri: str ="http://127.0.0.1:5000",
     mlflow_experiment_name: str = "spam-detection-experiment",
 ) -> None:
     mlflow_client, optuna_mlflow_callback = init_mlflow(
