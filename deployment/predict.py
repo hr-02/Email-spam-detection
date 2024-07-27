@@ -1,14 +1,9 @@
 import sys
 import pandas as pd
 from datetime import datetime
-import json
-import pandas as pd
 
 import mlflow
 from mlflow import MlflowClient
-
-from flask import Flask, request, jsonify
-
 
 from datasets import load_dataset
 from sentence_transformers import SentenceTransformer
@@ -69,20 +64,18 @@ def load_model(mlflow_client):
         production_model: the production model
     '''
     # Get all registered models
-    # registered_models = mlflow_client.search_registered_models(
-    #     filter_string=f"name='spam-detector-experiment'"
-    # )
+    registered_models = mlflow_client.search_registered_models(
+        filter_string=f"name='spam-detector'"
+    )
 
-    # production_model_run_id = [
-    #     [
-    #         model_version.run_id
-    #         for model_version in reg_model.latest_versions
-    #         if model_version.current_stage == 'Production'
-    #     ]
-    #     for reg_model in registered_models
-    # ][0][0]
-
-    production_model_run_id= "bc21592e99014b5884c77a79919ec8a1"
+    production_model_run_id = [
+        [
+            model_version.run_id
+            for model_version in reg_model.latest_versions
+            if model_version.current_stage == 'Production'
+        ]
+        for reg_model in registered_models
+    ][0][0]
 
     production_model_url = f'runs:/{production_model_run_id}/models'
 
@@ -91,24 +84,33 @@ def load_model(mlflow_client):
     return production_model
 
 
+def fetch_data():
+    '''
+    Simulate fetching 300 random unseen texts
+
+    Returns:
+        unseen_df: the dataframe containing the unseen texts
+    '''
+    spam_detection_dataset = load_dataset("Deysi/spam-detection-dataset")
+    spam_detection_dataset.set_format(type='pandas')
+
+    # Assuming unseen data is from the train dataset
+    unseen_df = spam_detection_dataset['train'][:].sample(300, random_state=10)
+    return unseen_df
+
 
 def get_current_year_and_month():
     now = datetime.now()
     return now.year, now.month
 
-app = Flask('spam-prediction')
 
-
-@app.route('/predict', methods=['POST'])
-def spam_detection():
-    unseen_df = request.get_json()
-
-    unseen_df=pd.read_json(unseen_df)
+def spam_detection(mlflow_tracking_uri=None):
+    unseen_df = fetch_data()
 
     unseen_embeddings = preprocess_data(unseen_df)
 
-    
-    mlflow_tracking_uri = "http://127.0.0.1:5000"
+    if mlflow_tracking_uri == None:
+        mlflow_tracking_uri = sys.argv[1]
     mlflow_client = MlflowClient(mlflow_tracking_uri)
     mlflow.set_tracking_uri(mlflow_tracking_uri)
     prod_model = load_model(mlflow_client)
@@ -118,8 +120,12 @@ def spam_detection():
     prediction_df = pd.DataFrame(predictions, columns=['prediction'])
     year, month = get_current_year_and_month()
     prediction_df['text_id'] = f'{year:04d}-{month:02d}_' + unseen_df.index.astype(str)
-    return jsonify(prediction_df.to_csv())
+
+    output_file = f's3://mlops-capstone-prediction/year={year:04d}/month={month:02d}/spam_detection.parquet'
+    prediction_df.to_parquet(
+        output_file, engine='pyarrow', compression=None, index=False
+    )
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=9696)
+    spam_detection()

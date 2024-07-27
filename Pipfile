@@ -11,6 +11,7 @@ sentence-transformers = "*"
 gunicorn = "*"
 evidently = "*"
 psycopg2-binary = "*"
+boto3 = "*"
 
 [dev-packages]
 
