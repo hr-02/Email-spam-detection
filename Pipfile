@@ -9,6 +9,8 @@ mlflow = "*"
 datasets = "*"
 sentence-transformers = "*"
 gunicorn = "*"
+evidently = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 
