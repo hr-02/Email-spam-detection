@@ -4,3 +4,6 @@ mlruns/*
 *.pyc
 *.csv
 *.joblib
+mlartifacts/*
+aws/*
+awscliv2.zip

@@ -150,10 +150,10 @@ def get_reference_data(production_model_run_id, mlflow_client):
     Returns:
         reference_df: the dataframe containing the reference data
     '''
-    # run_info = mlflow_client.get_run(production_model_run_id)
-    # artifact_uri = run_info.info.artifact_uri
+    run_info = mlflow_client.get_run(production_model_run_id)
+    s3_artifact_uri = run_info.info.artifact_uri
 
-    reference_df = pd.read_csv('mlartifacts/1/5ff6422b70a648a299abea1ccd91a4a7/artifacts/dataset/train_embeddings_df.csv')
+    reference_df = pd.read_csv(s3_artifact_uri + '/dataset/train_embeddings_df.csv')
     return reference_df
 
 
