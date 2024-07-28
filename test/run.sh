@@ -2,7 +2,7 @@
 
 # Check if a URL argument was provided
 if [ $# -eq 0 ]; then
-    echo "Usage: ./tests/run.sh MLFLOW_TRACKING_URL"
+    echo "Usage: ./test/run.sh MLFLOW_TRACKING_URL"
     exit 1
 fi
 
@@ -10,7 +10,7 @@ fi
 MLFLOW_TRACKING_URL="$1"
 
 # Activate the pipenv virtual environment
-pipenv shell
+#pipenv shell
 
 # Run command to test text embeddings length
 python -c "from test import unit_test; unit_test.test_text_embeddings_length()"
