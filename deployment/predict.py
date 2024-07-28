@@ -121,7 +121,7 @@ def spam_detection(mlflow_tracking_uri=None):
     year, month = get_current_year_and_month()
     prediction_df['text_id'] = f'{year:04d}-{month:02d}_' + unseen_df.index.astype(str)
 
-    output_file = f's3://mlops-capstone-prediction/year={year:04d}/month={month:02d}/spam_detection.parquet'
+    output_file = f's3://mlops-email/email-data/year={year:04d}/month={month:02d}/spam_detection.parquet'
     prediction_df.to_parquet(
         output_file, engine='pyarrow', compression=None, index=False
     )
