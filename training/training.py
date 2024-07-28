@@ -34,7 +34,7 @@ Steps for Prefect Deployment:
 
 
 @task(name="MLFlow Init")
-def init_mlflow(mlflow_tracking_uri= "http://16.170.204.58:5000", mlflow_experiment_name= "spam-detection-experiments"):
+def init_mlflow(mlflow_tracking_uri, mlflow_experiment_name):
     '''
     Initialise MLFlow for experiment tracking.
 
@@ -102,9 +102,7 @@ def load_preprocessor(device='cpu'):
     Returns:
         sentence_model: the sentence transformer model
     '''
-    return SentenceTransformer(
-        'all-mpnet-base-v2', device=device
-    )
+    return SentenceTransformer('all-mpnet-base-v2', device=device)
 
 
 @task(task_run_name="Embedding {embed_type} data")
@@ -344,7 +342,7 @@ def stage_model(client, model_info):
 
 @flow(name="Spam Detection Capstone")
 def detector_training_main(
-    mlflow_tracking_uri: str ="http://16.170.204.58:5000",
+    mlflow_tracking_uri: str = "http://16.170.204.58:5000",
     mlflow_experiment_name: str = "spam-detection-experiments",
 ) -> None:
     mlflow_client, optuna_mlflow_callback = init_mlflow(
