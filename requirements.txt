@@ -9,6 +9,7 @@ evidently
 pandas
 datasets
 mlflow
+boto3
 sentence_transformers
 numpy
 scikit-learn
