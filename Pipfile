@@ -11,9 +11,17 @@ sentence-transformers = "*"
 gunicorn = "*"
 evidently = "*"
 psycopg2-binary = "*"
-boto3 = "*"
+boto3 = "==1.34.149"
+pandas = "*"
+s3fs = "*"
+numpy = "==1.26.4"
+prefect = "==2.19.9"
+pyarrow = "*"
+psutil = "==6.0.0"
 
 [dev-packages]
+black = "*"
+isort = "*"
 
 [requires]
 python_version = "3.10"
