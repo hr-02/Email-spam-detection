@@ -293,7 +293,7 @@ def calculate_metrics_postgresql(reference_df, prediction_df):
 
 
 @flow(name="Batch Monitoring")
-def batch_monitoring(mlflow_tracking_uri: str = 'http://127.0.0.1:5000/') -> None:
+def batch_monitoring(mlflow_tracking_uri: str = 'http://16.170.204.58:5000/') -> None:
     prep_db()
 
     mlflow_client = init_mlflow(mlflow_tracking_uri)

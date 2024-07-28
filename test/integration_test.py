@@ -20,7 +20,7 @@ def TestIntegration(mlflow_tracking_uri):
     predict.spam_detection(mlflow_tracking_uri)
     year, month = predict.get_current_year_and_month()
     predict_output_exists = check_s3_file_exists(
-        'mlops-capstone-prediction',
+        'mlops-email/email-data',
         f'year={year:04d}/month={month:02d}/spam_detection.parquet',
     )
 
