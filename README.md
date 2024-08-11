@@ -1,6 +1,6 @@
 <h2 style="text-align:center;"> MLOps Zoomcamp Project: Email Spam Detection</h2>
 
-<img title="Email Spam Detection Workflow Overview" src="src\images\mlops overview.png">
+<img title="Email Spam Detection Workflow Overview" src="src\images\mlops_overview.png">
 
 <h3>Project Description</h3>
 
